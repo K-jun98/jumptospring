@@ -2,9 +2,14 @@ package com.example.board.question;
 
 import com.example.board.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,8 +20,11 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    public List<Question> getList() {
-        return this.questionRepository.findAll();
+    public Page<Question> getList(int page) {
+        Sort sorts = Sort.by("createDate").descending();
+        Pageable pageable = PageRequest.of(page, 10, sorts);
+        return this.questionRepository.findAll(pageable);
+//return this.questionRepository.findAllByCreateDate(page,pageable);
     }
 
     public Question getQuestion(Integer id) {

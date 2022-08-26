@@ -4,6 +4,7 @@ import com.example.board.answer.Answer;
 import com.example.board.answer.AnswerRepository;
 import com.example.board.question.Question;
 import com.example.board.question.QuestionRepository;
+import com.example.board.question.QuestionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,21 +18,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class SbbApplicationTests {
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionService questionService;
 
-    @Autowired
-    private AnswerRepository answerRepository;
-
-    @Transactional
     @Test
     void testJpa() {
-        Optional<Question> oq = this.questionRepository.findById(12);
-        assertTrue(oq.isPresent());
-        Question q = oq.get();
+        for (int i = 1; i <= 300; i++) {
+            String subject = String.format("테스트 데이터입니다:%03d", i);
+            String content = "내용무";
+            this.questionService.create(subject, content);
+        }
 
-        List<Answer> answerList = q.getAnswerList();
-
-        assertEquals(1,answerList.size());
     }
-
 }
